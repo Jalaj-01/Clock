@@ -1,0 +1,1212 @@
+/* ==========================================================================
+   Minimal Floating Flip Clock - Refined Stylesheet
+   ========================================================================== */
+
+:root {
+  --digit-color: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #cbd5e1;
+  --split-line-color: rgba(0, 0, 0, 0.9);
+  --accent-color: #06b6d4;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Cascadia Code', 'Consolas', monospace;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Widget Outer Viewport & Card Container
+   ========================================================================== */
+
+.widget-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  padding: 2px;
+}
+
+.widget-viewport:active {
+  cursor: grabbing;
+}
+
+.widget-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ==========================================================================
+   THREE MODES: Ultra-Translucent by Default (BG Data Visible) -> Opaque on Hover
+   ========================================================================== */
+
+/* Mode A: Timer (Warm Amber / Espresso) */
+.widget-card.mode-timer {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(45, 20, 4, 0.18) 0%, rgba(25, 11, 2, 0.14) 55%, rgba(12, 5, 1, 0.10) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(245, 158, 11, 0.05);
+}
+
+.widget-card.mode-timer .flip-panel.top,
+.widget-card.mode-timer .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(46, 26, 11, 0.22) 0%, rgba(32, 17, 5, 0.22) 100%);
+  border-color: rgba(245, 158, 11, 0.18);
+}
+
+.widget-card.mode-timer .flip-panel.bottom,
+.widget-card.mode-timer .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(29, 15, 4, 0.22) 0%, rgba(18, 9, 1, 0.22) 100%);
+  border-color: rgba(245, 158, 11, 0.18);
+}
+
+/* Mode A: Hovered (Opaque & High Contrast) */
+.widget-viewport:hover .widget-card.mode-timer,
+.widget-card.mode-timer:hover {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(53, 26, 5, 0.95) 0%, rgba(30, 14, 2, 0.92) 55%, rgba(15, 7, 1, 0.92) 100%);
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(245, 158, 11, 0.35);
+}
+
+.widget-viewport:hover .widget-card.mode-timer .flip-panel.top,
+.widget-viewport:hover .widget-card.mode-timer .flip-flap.top-flap,
+.widget-card.mode-timer:hover .flip-panel.top,
+.widget-card.mode-timer:hover .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(46, 26, 11, 0.98) 0%, rgba(32, 17, 5, 0.98) 100%);
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+.widget-viewport:hover .widget-card.mode-timer .flip-panel.bottom,
+.widget-viewport:hover .widget-card.mode-timer .flip-flap.bottom-flap,
+.widget-card.mode-timer:hover .flip-panel.bottom,
+.widget-card.mode-timer:hover .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(29, 15, 4, 0.98) 0%, rgba(18, 9, 1, 0.98) 100%);
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+/* Mode B: Work (Deep Emerald / Mint Green) */
+.widget-card.mode-work {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(6, 40, 24, 0.18) 0%, rgba(2, 22, 13, 0.14) 55%, rgba(1, 10, 6, 0.10) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(16, 185, 129, 0.05);
+}
+
+.widget-card.mode-work .flip-panel.top,
+.widget-card.mode-work .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(9, 44, 28, 0.22) 0%, rgba(5, 29, 18, 0.22) 100%);
+  border-color: rgba(16, 185, 129, 0.18);
+}
+
+.widget-card.mode-work .flip-panel.bottom,
+.widget-card.mode-work .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(5, 27, 16, 0.22) 0%, rgba(2, 16, 9, 0.22) 100%);
+  border-color: rgba(16, 185, 129, 0.18);
+}
+
+/* Mode B: Hovered (Opaque & High Contrast) */
+.widget-viewport:hover .widget-card.mode-work,
+.widget-card.mode-work:hover {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(7, 49, 30, 0.95) 0%, rgba(3, 27, 16, 0.92) 55%, rgba(1, 14, 8, 0.92) 100%);
+  border-color: rgba(16, 185, 129, 0.65);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(16, 185, 129, 0.35);
+}
+
+.widget-viewport:hover .widget-card.mode-work .flip-panel.top,
+.widget-viewport:hover .widget-card.mode-work .flip-flap.top-flap,
+.widget-card.mode-work:hover .flip-panel.top,
+.widget-card.mode-work:hover .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(9, 44, 28, 0.98) 0%, rgba(5, 29, 18, 0.98) 100%);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.widget-viewport:hover .widget-card.mode-work .flip-panel.bottom,
+.widget-viewport:hover .widget-card.mode-work .flip-flap.bottom-flap,
+.widget-card.mode-work:hover .flip-panel.bottom,
+.widget-card.mode-work:hover .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(5, 27, 16, 0.98) 0%, rgba(2, 16, 9, 0.98) 100%);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* Mode C: Clock (Midnight / Sapphire Cyan) */
+.widget-card.mode-clock {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(8, 35, 65, 0.18) 0%, rgba(3, 16, 32, 0.14) 55%, rgba(1, 7, 16, 0.10) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(6, 182, 212, 0.05);
+}
+
+.widget-card.mode-clock .flip-panel.top,
+.widget-card.mode-clock .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(13, 40, 68, 0.22) 0%, rgba(7, 25, 45, 0.22) 100%);
+  border-color: rgba(6, 182, 212, 0.18);
+}
+
+.widget-card.mode-clock .flip-panel.bottom,
+.widget-card.mode-clock .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(7, 25, 45, 0.22) 0%, rgba(3, 14, 26, 0.22) 100%);
+  border-color: rgba(6, 182, 212, 0.18);
+}
+
+/* Mode C: Hovered (Opaque & High Contrast) */
+.widget-viewport:hover .widget-card.mode-clock,
+.widget-card.mode-clock:hover {
+  background: radial-gradient(130% 130% at 50% 0%, rgba(10, 43, 78, 0.95) 0%, rgba(4, 21, 40, 0.92) 55%, rgba(1, 9, 21, 0.92) 100%);
+  border-color: rgba(6, 182, 212, 0.65);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(6, 182, 212, 0.35);
+}
+
+.widget-viewport:hover .widget-card.mode-clock .flip-panel.top,
+.widget-viewport:hover .widget-card.mode-clock .flip-flap.top-flap,
+.widget-card.mode-clock:hover .flip-panel.top,
+.widget-card.mode-clock:hover .flip-flap.top-flap {
+  background: linear-gradient(180deg, rgba(13, 40, 68, 0.98) 0%, rgba(7, 25, 45, 0.98) 100%);
+  border-color: rgba(6, 182, 212, 0.45);
+}
+
+.widget-viewport:hover .widget-card.mode-clock .flip-panel.bottom,
+.widget-viewport:hover .widget-card.mode-clock .flip-flap.bottom-flap,
+.widget-card.mode-clock:hover .flip-panel.bottom,
+.widget-card.mode-clock:hover .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, rgba(7, 25, 45, 0.98) 0%, rgba(3, 14, 26, 0.98) 100%);
+  border-color: rgba(6, 182, 212, 0.45);
+}
+
+/* ==========================================================================
+   COMPACT MODE: Snug, Clean, Minimalist Flip Clock with Day & Date
+   ========================================================================== */
+
+.widget-card.compact {
+  padding: 4px 6px 4px 6px;
+  justify-content: space-between;
+}
+
+.compact-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.compact-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 15px;
+  padding: 0 4px;
+  opacity: 0.78;
+  transition: opacity 0.25s ease;
+}
+
+.widget-viewport:hover .compact-top-bar,
+.widget-card:hover .compact-top-bar {
+  opacity: 1;
+}
+
+.compact-meta-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.meta-day-date {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.meta-dot {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 1px;
+}
+
+.meta-time {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.compact-status-tag {
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 1.5px 5px;
+  border-radius: 2px;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.compact-status-tag.work {
+  background: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
+.compact-status-tag.break {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+.compact-status-tag.timer {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+/* ==========================================================================
+   TRANSPARENT EXPAND & COLLAPSE BUTTONS (Clean, borderless, floating icons)
+   ========================================================================== */
+
+.compact-extend-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: var(--text-dim) !important;
+  opacity: 0.65;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.compact-extend-btn:hover {
+  opacity: 1;
+  color: #ffffff !important;
+  transform: scale(1.15);
+}
+
+.icon-action-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.icon-action-btn:hover {
+  opacity: 1;
+  color: #ffffff !important;
+  transform: scale(1.15);
+}
+
+.icon-action-btn.close:hover {
+  color: #f87171 !important;
+}
+
+.compact-digits-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.widget-card.compact .flip-card-wrapper {
+  width: 22px;
+  height: 35px;
+  perspective: 300px;
+  -webkit-perspective: 300px;
+}
+
+.widget-card.compact .flip-card {
+  font-size: 24px;
+  line-height: 35px;
+  perspective: 300px;
+  -webkit-perspective: 300px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.widget-card.compact .digit-content {
+  height: 35px;
+}
+
+.expanded-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 14px;
+  margin-top: -1px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   EXPANDED MODE: Full Feature Bar & Controls
+   ========================================================================== */
+
+.widget-card.expanded {
+  padding: 8px 10px;
+  justify-content: space-between;
+}
+
+.widget-card.expanded::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Header & Mode Selector Bar
+   ========================================================================== */
+
+.mode-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22px;
+  z-index: 5;
+  opacity: 0.82;
+  transition: opacity 0.25s ease;
+}
+
+.widget-viewport:hover .mode-selector-bar,
+.widget-card:hover .mode-selector-bar {
+  opacity: 1;
+}
+
+.mode-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2.5px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.mode-tab-btn:hover {
+  color: var(--text-dim);
+}
+
+.mode-tab-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.mode-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--tab-accent);
+  box-shadow: 0 0 5px var(--tab-accent);
+}
+
+.window-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.format-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.format-toggle-btn:hover,
+.format-toggle-btn.active {
+  background: var(--accent-color);
+  color: #000000;
+  border-color: var(--accent-color);
+}
+
+.icon-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.icon-action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.icon-action-btn.close:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* ==========================================================================
+   Clock Body & Split-Flap Display
+   ========================================================================== */
+
+.clock-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.flip-clock-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  position: relative;
+}
+
+.digit-pair {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+}
+
+/* Split-Flap Separator (Colon dots) */
+.flip-separator {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0 2px;
+}
+
+.flip-separator .dot {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+}
+
+/* 12-Hour AM/PM Indicator badge */
+.ampm-indicator {
+  margin-left: 3px;
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--accent-color);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2px 3px;
+  border-radius: 3px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  align-self: center;
+}
+
+/* ==========================================================================
+   Flip Digit Card Architecture
+   ========================================================================== */
+
+.flip-card-wrapper {
+  position: relative;
+  width: 26px;
+  height: 40px;
+  perspective: 350px;
+  -webkit-perspective: 350px;
+}
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 350px;
+  -webkit-perspective: 350px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 40px;
+  text-align: center;
+}
+
+/* Upper and Lower Panels */
+.flip-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  color: var(--digit-color);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* Digit text positioning to align half-cards perfectly */
+.digit-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 5px rgba(0, 0, 0, 0.7);
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+/* Upper Half Panel */
+.flip-panel.top {
+  top: 0;
+  border-radius: 4px 4px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.65);
+  z-index: 1;
+}
+
+.flip-panel.top .digit-content {
+  top: 0;
+}
+
+/* Lower Half Panel */
+.flip-panel.bottom {
+  bottom: 0;
+  border-radius: 0 0 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  z-index: 1;
+}
+
+.flip-panel.bottom .digit-content {
+  bottom: 0;
+}
+
+/* Falling leaf shadow cast onto static bottom card while flipping */
+.flip-card.flipping .flip-panel.flip-static.bottom::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 100%);
+  animation: static-bottom-shadow 0.34s ease-out forwards;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes static-bottom-shadow {
+  0% { opacity: 0; }
+  50% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* Dynamic 3D Flipping Flaps */
+.flip-flap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  color: var(--digit-color);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* Top flap: folds down from 0deg -> -90deg */
+.flip-flap.top-flap {
+  top: 0;
+  border-radius: 4px 4px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.65);
+  transform-origin: 50% 100%;
+  animation: flip-fold-down 0.18s cubic-bezier(0.4, 0.0, 0.6, 1) forwards;
+  z-index: 6;
+}
+
+.flip-flap.top-flap .digit-content {
+  top: 0;
+}
+
+/* Bottom flap: unfolds down from 90deg -> 0deg */
+.flip-flap.bottom-flap {
+  bottom: 0;
+  border-radius: 0 0 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  transform-origin: 50% 0%;
+  animation: flip-drop-down 0.18s cubic-bezier(0.0, 0.0, 0.2, 1) 0.16s both;
+  z-index: 7;
+}
+
+.flip-flap.bottom-flap .digit-content {
+  bottom: 0;
+}
+
+@keyframes flip-fold-down {
+  0% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+  }
+  98% {
+    transform: rotateX(-90deg);
+    filter: brightness(0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(-90deg);
+    filter: brightness(0.35);
+    opacity: 0;
+  }
+}
+
+@keyframes flip-drop-down {
+  0% {
+    transform: rotateX(90deg);
+    filter: brightness(0.35);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+    filter: brightness(0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  }
+  85% {
+    transform: rotateX(-2deg);
+    filter: brightness(1.05);
+  }
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+  }
+}
+
+/* Reduced Motion adjustment: maintain physical flip mechanics cleanly */
+@media (prefers-reduced-motion: reduce) {
+  .flip-flap.top-flap {
+    animation-duration: 0.14s;
+  }
+  .flip-flap.bottom-flap {
+    animation-duration: 0.14s;
+    animation-delay: 0.12s;
+  }
+}
+
+/* Split-Flap Crease (horizontal gap between upper and lower card) */
+.flip-crease {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0.5px 0 rgba(255, 255, 255, 0.08);
+  z-index: 3;
+}
+
+/* Side notches (pin pivot hinges) */
+.notch-left, .notch-right {
+  position: absolute;
+  top: calc(50% - 1.5px);
+  width: 1.5px;
+  height: 3px;
+  background: #000000;
+  z-index: 4;
+}
+
+.notch-left {
+  left: 0;
+  border-radius: 0 1px 1px 0;
+}
+
+.notch-right {
+  right: 0;
+  border-radius: 1px 0 0 1px;
+}
+
+/* ==========================================================================
+   Controls Bar & Custom Duration Setter
+   ========================================================================== */
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  z-index: 5;
+  position: relative;
+  opacity: 0.82;
+  transition: opacity 0.25s ease;
+}
+
+.widget-viewport:hover .controls-bar,
+.widget-card:hover .controls-bar {
+  opacity: 1;
+}
+
+.timer-controls,
+.work-controls,
+.clock-controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
+}
+
+/* Action Buttons */
+.control-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.control-btn.primary {
+  background: var(--accent-color);
+  color: #000000;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.control-btn.primary:hover {
+  filter: brightness(1.15);
+}
+
+.control-btn.primary.running {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.control-btn.pause {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.control-btn.resume {
+  background: var(--accent-color);
+  color: #000000;
+}
+
+/* Duration Setting Pill */
+.duration-pill-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.duration-pill-btn:hover,
+.duration-pill-btn.active {
+  background: var(--accent-color);
+  color: #000000;
+}
+
+/* Custom Duration Panel (Hours & Minutes Stepper + Presets) */
+.custom-duration-panel {
+  position: absolute;
+  bottom: 28px;
+  right: 0;
+  background: #111116;
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  padding: 6px 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 20;
+}
+
+.presets-row {
+  display: flex;
+  gap: 3px;
+}
+
+.preset-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.preset-btn:hover {
+  background: var(--accent-color);
+  color: #000000;
+}
+
+.duration-inputs-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+.time-num-input {
+  width: 26px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  font-family: inherit;
+}
+
+.input-unit {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.input-divider {
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.custom-set-btn {
+  height: 22px;
+  background: var(--accent-color);
+  border: none;
+  color: #000000;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 3px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2.5px 6px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.status-badge.work {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.status-badge.break {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.status-badge.idle {
+  color: var(--text-muted);
+}
+
+.pulsing-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+  animation: pulse 1.5s infinite;
+}
+
+.amber-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 6px #fbbf24;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Mode C Clock Indicator */
+.clock-controls {
+  justify-content: center;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+}
+
+.live-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--badge-accent);
+  box-shadow: 0 0 5px var(--badge-accent);
+}
+
+/* ==========================================================================
+   Settings Modal Overlay
+   ========================================================================== */
+
+.settings-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 14, 0.97);
+  border-radius: 10px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+  margin-bottom: 6px;
+}
+
+.settings-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-row.corners {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.settings-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.settings-note {
+  font-size: 8px;
+  color: var(--text-muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  width: 28px;
+  height: 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.toggle-switch.on {
+  background: var(--modal-accent);
+  border-color: var(--modal-accent);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 1.5px;
+  left: 2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch.on .toggle-thumb {
+  transform: translateX(11px);
+}
+
+/* Corner Grid */
+.corner-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+
+.corner-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 0;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.corner-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.corner-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--modal-accent);
+  color: var(--modal-accent);
+}
