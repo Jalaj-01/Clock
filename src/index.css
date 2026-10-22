@@ -58,149 +58,97 @@ html, body, #root {
 }
 
 /* ==========================================================================
-   THREE MODES: Ultra-Translucent by Default (BG Data Visible) -> Opaque on Hover
+   UNIFIED PURE BLACK THEME (Replaces previous 3 colored backgrounds with Black)
    ========================================================================== */
 
-/* Mode A: Timer (Warm Amber / Espresso) */
-.widget-card.mode-timer {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(45, 20, 4, 0.18) 0%, rgba(25, 11, 2, 0.14) 55%, rgba(12, 5, 1, 0.10) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.18);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(245, 158, 11, 0.05);
+/* Default / Expanded Card: Pure Deep Black */
+.widget-card {
+  background: radial-gradient(130% 130% at 50% 0%, #1c1c20 0%, #0c0c0e 55%, #050506 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.widget-card.mode-timer .flip-panel.top,
-.widget-card.mode-timer .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(46, 26, 11, 0.22) 0%, rgba(32, 17, 5, 0.22) 100%);
-  border-color: rgba(245, 158, 11, 0.18);
+.widget-card .flip-panel.top,
+.widget-card .flip-flap.top-flap {
+  background: linear-gradient(180deg, #222226 0%, #141417 100%);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-.widget-card.mode-timer .flip-panel.bottom,
-.widget-card.mode-timer .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(29, 15, 4, 0.22) 0%, rgba(18, 9, 1, 0.22) 100%);
-  border-color: rgba(245, 158, 11, 0.18);
+.widget-card .flip-panel.bottom,
+.widget-card .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, #151518 0%, #0a0a0c 100%);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-/* Mode A: Hovered (Opaque & High Contrast) */
-.widget-viewport:hover .widget-card.mode-timer,
-.widget-card.mode-timer:hover {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(53, 26, 5, 0.95) 0%, rgba(30, 14, 2, 0.92) 55%, rgba(15, 7, 1, 0.92) 100%);
-  border-color: rgba(245, 158, 11, 0.65);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(245, 158, 11, 0.35);
+/* Hovered Card: Deep High-Contrast Jet Black with Crisp Border */
+.widget-viewport:hover .widget-card,
+.widget-card:hover {
+  background: radial-gradient(130% 130% at 50% 0%, #222227 0%, #0e0e11 55%, #050507 100%);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9), 0 0 16px rgba(0, 0, 0, 0.6);
 }
 
-.widget-viewport:hover .widget-card.mode-timer .flip-panel.top,
-.widget-viewport:hover .widget-card.mode-timer .flip-flap.top-flap,
-.widget-card.mode-timer:hover .flip-panel.top,
-.widget-card.mode-timer:hover .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(46, 26, 11, 0.98) 0%, rgba(32, 17, 5, 0.98) 100%);
-  border-color: rgba(245, 158, 11, 0.45);
+.widget-viewport:hover .widget-card .flip-panel.top,
+.widget-viewport:hover .widget-card .flip-flap.top-flap,
+.widget-card:hover .flip-panel.top,
+.widget-card:hover .flip-flap.top-flap {
+  background: linear-gradient(180deg, #25252a 0%, #161619 100%);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
-.widget-viewport:hover .widget-card.mode-timer .flip-panel.bottom,
-.widget-viewport:hover .widget-card.mode-timer .flip-flap.bottom-flap,
-.widget-card.mode-timer:hover .flip-panel.bottom,
-.widget-card.mode-timer:hover .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(29, 15, 4, 0.98) 0%, rgba(18, 9, 1, 0.98) 100%);
-  border-color: rgba(245, 158, 11, 0.45);
-}
-
-/* Mode B: Work (Deep Emerald / Mint Green) */
-.widget-card.mode-work {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(6, 40, 24, 0.18) 0%, rgba(2, 22, 13, 0.14) 55%, rgba(1, 10, 6, 0.10) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.18);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(16, 185, 129, 0.05);
-}
-
-.widget-card.mode-work .flip-panel.top,
-.widget-card.mode-work .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(9, 44, 28, 0.22) 0%, rgba(5, 29, 18, 0.22) 100%);
-  border-color: rgba(16, 185, 129, 0.18);
-}
-
-.widget-card.mode-work .flip-panel.bottom,
-.widget-card.mode-work .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(5, 27, 16, 0.22) 0%, rgba(2, 16, 9, 0.22) 100%);
-  border-color: rgba(16, 185, 129, 0.18);
-}
-
-/* Mode B: Hovered (Opaque & High Contrast) */
-.widget-viewport:hover .widget-card.mode-work,
-.widget-card.mode-work:hover {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(7, 49, 30, 0.95) 0%, rgba(3, 27, 16, 0.92) 55%, rgba(1, 14, 8, 0.92) 100%);
-  border-color: rgba(16, 185, 129, 0.65);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(16, 185, 129, 0.35);
-}
-
-.widget-viewport:hover .widget-card.mode-work .flip-panel.top,
-.widget-viewport:hover .widget-card.mode-work .flip-flap.top-flap,
-.widget-card.mode-work:hover .flip-panel.top,
-.widget-card.mode-work:hover .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(9, 44, 28, 0.98) 0%, rgba(5, 29, 18, 0.98) 100%);
-  border-color: rgba(16, 185, 129, 0.45);
-}
-
-.widget-viewport:hover .widget-card.mode-work .flip-panel.bottom,
-.widget-viewport:hover .widget-card.mode-work .flip-flap.bottom-flap,
-.widget-card.mode-work:hover .flip-panel.bottom,
-.widget-card.mode-work:hover .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(5, 27, 16, 0.98) 0%, rgba(2, 16, 9, 0.98) 100%);
-  border-color: rgba(16, 185, 129, 0.45);
-}
-
-/* Mode C: Clock (Midnight / Sapphire Cyan) */
-.widget-card.mode-clock {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(8, 35, 65, 0.18) 0%, rgba(3, 16, 32, 0.14) 55%, rgba(1, 7, 16, 0.10) 100%);
-  border: 1px solid rgba(6, 182, 212, 0.18);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 6px rgba(6, 182, 212, 0.05);
-}
-
-.widget-card.mode-clock .flip-panel.top,
-.widget-card.mode-clock .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(13, 40, 68, 0.22) 0%, rgba(7, 25, 45, 0.22) 100%);
-  border-color: rgba(6, 182, 212, 0.18);
-}
-
-.widget-card.mode-clock .flip-panel.bottom,
-.widget-card.mode-clock .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(7, 25, 45, 0.22) 0%, rgba(3, 14, 26, 0.22) 100%);
-  border-color: rgba(6, 182, 212, 0.18);
-}
-
-/* Mode C: Hovered (Opaque & High Contrast) */
-.widget-viewport:hover .widget-card.mode-clock,
-.widget-card.mode-clock:hover {
-  background: radial-gradient(130% 130% at 50% 0%, rgba(10, 43, 78, 0.95) 0%, rgba(4, 21, 40, 0.92) 55%, rgba(1, 9, 21, 0.92) 100%);
-  border-color: rgba(6, 182, 212, 0.65);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(6, 182, 212, 0.35);
-}
-
-.widget-viewport:hover .widget-card.mode-clock .flip-panel.top,
-.widget-viewport:hover .widget-card.mode-clock .flip-flap.top-flap,
-.widget-card.mode-clock:hover .flip-panel.top,
-.widget-card.mode-clock:hover .flip-flap.top-flap {
-  background: linear-gradient(180deg, rgba(13, 40, 68, 0.98) 0%, rgba(7, 25, 45, 0.98) 100%);
-  border-color: rgba(6, 182, 212, 0.45);
-}
-
-.widget-viewport:hover .widget-card.mode-clock .flip-panel.bottom,
-.widget-viewport:hover .widget-card.mode-clock .flip-flap.bottom-flap,
-.widget-card.mode-clock:hover .flip-panel.bottom,
-.widget-card.mode-clock:hover .flip-flap.bottom-flap {
-  background: linear-gradient(180deg, rgba(7, 25, 45, 0.98) 0%, rgba(3, 14, 26, 0.98) 100%);
-  border-color: rgba(6, 182, 212, 0.45);
+.widget-viewport:hover .widget-card .flip-panel.bottom,
+.widget-viewport:hover .widget-card .flip-flap.bottom-flap,
+.widget-card:hover .flip-panel.bottom,
+.widget-card:hover .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, #17171a 0%, #0b0b0d 100%);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 /* ==========================================================================
    COMPACT MODE: Snug, Clean, Minimalist Flip Clock with Day & Date
    ========================================================================== */
 
-.widget-card.compact {
-  padding: 4px 6px 4px 6px;
-  justify-content: space-between;
-}
+/* ==========================================================================
+   COMPACT MODE: Big Digits with Snug, Borderless Floating View
+   (No box when transparent; box appears on hover)
+   ========================================================================== */
 
 .widget-card.compact {
-  border-radius: 6px;
+  width: 100%;
+  max-width: 186px;
+  height: 100%;
+  max-height: 56px;
+  border-radius: 8px;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  padding: 3px 6px 3px 6px;
+  justify-content: space-between;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover: SHOW PURE BLACK BOX! */
+.widget-viewport:hover .widget-card.compact,
+.widget-card.compact:hover {
+  background: radial-gradient(130% 130% at 50% 0%, #1c1c20 0%, #0c0c0e 60%, #050506 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9), 0 0 1px rgba(255, 255, 255, 0.15) !important;
+}
+
+.widget-viewport:hover .widget-card.compact .flip-panel.top,
+.widget-viewport:hover .widget-card.compact .flip-flap.top-flap,
+.widget-card.compact:hover .flip-panel.top,
+.widget-card.compact:hover .flip-flap.top-flap {
+  background: linear-gradient(180deg, #242428 0%, #151518 100%) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.widget-viewport:hover .widget-card.compact .flip-panel.bottom,
+.widget-viewport:hover .widget-card.compact .flip-flap.bottom-flap,
+.widget-card.compact:hover .flip-panel.bottom,
+.widget-card.compact:hover .flip-flap.bottom-flap {
+  background: linear-gradient(180deg, #161619 0%, #0a0a0c 100%) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
 }
 
 .compact-container {
@@ -209,133 +157,114 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3px 6px 3px 6px;
 }
 
 .compact-top-bar {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  height: 11px;
-  padding: 0 1px;
-  opacity: 0.78;
-  transition: opacity 0.25s ease;
-}
-
-.widget-viewport:hover .compact-top-bar,
-.widget-card:hover .compact-top-bar {
-  opacity: 1;
+  height: 12px;
+  padding: 0 4px;
+  opacity: 0.92;
+  transition: opacity 0.2s ease;
 }
 
 .compact-meta-group {
   display: flex;
   align-items: center;
-  gap: 3.5px;
+  justify-content: center;
+  gap: 4px;
   line-height: 1;
+  text-align: center;
 }
 
 .meta-day-date {
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.6px;
   color: var(--text-dim);
   text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
 }
 
 .meta-dot {
-  font-size: 7px;
-  color: rgba(255, 255, 255, 0.35);
-  margin: 0 1px;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 1.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
 }
 
 .meta-time {
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.4px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
 }
 
 .compact-status-tag {
-  font-size: 6.5px;
+  font-size: 7px;
   font-weight: 800;
   letter-spacing: 0.5px;
-  padding: 1px 3.5px;
+  padding: 1px 4px;
   border-radius: 2px;
   line-height: 1;
   margin-left: 2px;
 }
 
 .compact-status-tag.work {
-  background: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.3);
   color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.45);
+  border: 1px solid rgba(16, 185, 129, 0.5);
 }
 
 .compact-status-tag.break {
-  background: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.3);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.45);
+  border: 1px solid rgba(245, 158, 11, 0.5);
 }
 
 .compact-status-tag.timer {
-  background: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.3);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.45);
+  border: 1px solid rgba(245, 158, 11, 0.5);
 }
 
-/* ==========================================================================
-   TRANSPARENT EXPAND & COLLAPSE BUTTONS (Clean, borderless, floating icons)
-   ========================================================================== */
-
+/* Extend button: absolute right, hidden when transparent; visible on hover */
 .compact-extend-btn {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
   color: var(--text-dim) !important;
-  opacity: 0.65;
-  width: 11px;
-  height: 11px;
+  opacity: 0;
+  width: 13px;
+  height: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: all 0.15s ease;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.widget-viewport:hover .compact-extend-btn,
+.widget-card:hover .compact-extend-btn {
+  opacity: 0.75;
+  pointer-events: auto;
 }
 
 .compact-extend-btn:hover {
-  opacity: 1;
+  opacity: 1 !important;
   color: #ffffff !important;
-  transform: scale(1.15);
-}
-
-.icon-action-btn {
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  color: var(--text-muted) !important;
-  opacity: 0.7;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.15s ease;
-}
-
-.icon-action-btn:hover {
-  opacity: 1;
-  color: #ffffff !important;
-  transform: scale(1.15);
-}
-
-.icon-action-btn.close:hover {
-  color: #f87171 !important;
+  transform: translateY(-50%) scale(1.15) !important;
 }
 
 .compact-digits-wrapper {
@@ -345,60 +274,81 @@ html, body, #root {
   flex: 1;
 }
 
+/* BIG DIGITS for compact mode */
 .widget-card.compact .flip-card-wrapper {
-  width: 15px;
-  height: 22px;
-  perspective: 250px;
-  -webkit-perspective: 250px;
+  width: 22px;
+  height: 35px;
+  perspective: 300px;
+  -webkit-perspective: 300px;
 }
 
 .widget-card.compact .flip-card {
-  font-size: 15px;
-  line-height: 22px;
-  perspective: 250px;
-  -webkit-perspective: 250px;
+  font-size: 25px;
+  line-height: 35px;
+  perspective: 300px;
+  -webkit-perspective: 300px;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 }
 
 .widget-card.compact .digit-content {
-  height: 22px;
+  height: 35px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 0, 0, 0.85);
+}
+
+/* In transparent unhovered state: clean subtle backing */
+.widget-card.compact:not(:hover) .flip-panel.top,
+.widget-card.compact:not(:hover) .flip-flap.top-flap {
+  background: rgba(14, 20, 32, 0.32);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.widget-card.compact:not(:hover) .flip-panel.bottom,
+.widget-card.compact:not(:hover) .flip-flap.bottom-flap {
+  background: rgba(9, 13, 22, 0.32);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .widget-card.compact .flip-panel.top,
 .widget-card.compact .flip-flap.top-flap {
-  border-radius: 2.5px 2.5px 0 0;
+  border-radius: 3.5px 3.5px 0 0;
 }
 
 .widget-card.compact .flip-panel.bottom,
 .widget-card.compact .flip-flap.bottom-flap {
-  border-radius: 0 0 2.5px 2.5px;
+  border-radius: 0 0 3.5px 3.5px;
 }
 
 .widget-card.compact .flip-clock-display {
-  gap: 2px;
+  gap: 2.5px;
 }
 
 .widget-card.compact .digit-pair {
-  gap: 1.5px;
+  gap: 2px;
 }
 
 .widget-card.compact .flip-separator {
-  gap: 3.5px;
-  padding: 0 1px;
+  gap: 6px;
+  padding: 0 1.5px;
 }
 
 .widget-card.compact .flip-separator .dot {
-  width: 2px;
-  height: 2px;
-  border-radius: 0.5px;
+  width: 3px;
+  height: 3px;
+  border-radius: 0.8px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .widget-card.compact .ampm-indicator {
-  font-size: 6.5px;
-  padding: 1px 2px;
+  font-size: 7.5px;
+  font-weight: 800;
+  padding: 1.5px 3px;
   margin-left: 2px;
-  border-radius: 2px;
+  border-radius: 2.5px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .expanded-date-row {

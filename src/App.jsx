@@ -203,12 +203,8 @@ export default function App() {
             <div className="compact-top-bar">
               <div className="compact-meta-group">
                 <span className="meta-day-date">{clock.dateInfo?.formatted || 'THU, 22 OCT'}</span>
-                {mode !== 'clock' && (
-                  <>
-                    <span className="meta-dot">•</span>
-                    <span className="meta-time">{currentLocalTimeStr}</span>
-                  </>
-                )}
+                <span className="meta-dot">•</span>
+                <span className="meta-time">{currentLocalTimeStr}</span>
                 {mode === 'work' && activeDisplay.status === 'break' && (
                   <span className="compact-status-tag break">BREAK</span>
                 )}
