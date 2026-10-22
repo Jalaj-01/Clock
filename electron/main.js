@@ -18,8 +18,8 @@ if (!gotTheLock) {
 
 const COMPACT_WIDTH = 186;
 const COMPACT_HEIGHT = 56;
-const EXPANDED_WIDTH = 250;
-const EXPANDED_HEIGHT = 160;
+const EXPANDED_WIDTH = 292;
+const EXPANDED_HEIGHT = 148;
 const CORNER_MARGIN = 16;
 
 let mainWindow = null;
