@@ -10,11 +10,13 @@ export default function ModeSelector({
   is12Hour,
   onToggle12Hour,
   accentColor,
+  isAlarmEnabled,
 }) {
   const modes = [
+    { id: 'clock', label: 'Clock' },
     { id: 'timer', label: 'Timer' },
     { id: 'work', label: 'Work' },
-    { id: 'clock', label: 'Clock' },
+    { id: 'alarm', label: 'Alarm' },
   ];
 
   return (

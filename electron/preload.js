@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
   closeWindow: () => ipcRenderer.invoke('window:close'),
   minimizeWindow: () => ipcRenderer.invoke('window:minimize'),
+  showWindow: () => ipcRenderer.invoke('window:show'),
   
   dragStart: (coords) => ipcRenderer.send('window:drag-start', coords),
   dragMove: (coords) => ipcRenderer.send('window:drag-move', coords),

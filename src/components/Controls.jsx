@@ -1,29 +1,44 @@
 import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, Clock, Check, SlidersHorizontal } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock, Check, SlidersHorizontal, Bell, BellOff, BellRing } from 'lucide-react';
 
 export default function Controls({
   mode,
   timer,
   work,
+  alarm,
   accentColor,
 }) {
   const [showCustomSetter, setShowCustomSetter] = useState(false);
-  const [inputHours, setInputHours] = useState(String(timer.durationHours || 0));
-  const [inputMinutes, setInputMinutes] = useState(String(timer.durationRemainingMinutes || 25));
+  const [inputHours, setInputHours] = useState(String(timer?.durationHours || 0));
+  const [inputMinutes, setInputMinutes] = useState(String(timer?.durationRemainingMinutes || 25));
+
+  const [showAlarmSetter, setShowAlarmSetter] = useState(false);
+  const [alarmInputHours, setAlarmInputHours] = useState(String(alarm?.alarmHours ?? 8));
+  const [alarmInputMinutes, setAlarmInputMinutes] = useState(String(alarm?.alarmMinutes ?? 0));
 
   const handleApplyCustomDuration = (e) => {
     e?.preventDefault();
     const h = parseInt(inputHours, 10) || 0;
     const m = parseInt(inputMinutes, 10) || 0;
     if (h > 0 || m > 0) {
-      timer.setCustomDuration(h, m);
+      timer?.setCustomDuration(h, m);
     }
     setShowCustomSetter(false);
   };
 
   const handlePreset = (mins) => {
-    timer.setDuration(mins);
+    timer?.setDuration(mins);
     setShowCustomSetter(false);
+  };
+
+  const handleApplyAlarmTime = (e) => {
+    e?.preventDefault();
+    if (!alarm) return;
+    const h = parseInt(alarmInputHours, 10) || 0;
+    const m = parseInt(alarmInputMinutes, 10) || 0;
+    alarm.setTime(h, m);
+    alarm.setIsEnabled(true);
+    setShowAlarmSetter(false);
   };
 
   return (
@@ -201,6 +216,119 @@ export default function Controls({
             <span className="live-dot" />
             <span>LOCAL TIME</span>
           </div>
+        </div>
+      )}
+
+      {/* MODE D: ALARM */}
+      {mode === 'alarm' && alarm && (
+        <div className="alarm-controls">
+          <div className="left-controls">
+            <button
+              className={`control-btn primary ${alarm.isEnabled ? 'running' : ''}`}
+              style={{ '--btn-accent': accentColor }}
+              onClick={alarm.toggleEnabled}
+              title={alarm.isEnabled ? 'Turn Alarm OFF' : 'Turn Alarm ON'}
+              aria-label={alarm.isEnabled ? 'Turn Alarm OFF' : 'Turn Alarm ON'}
+            >
+              {alarm.isEnabled ? (
+                <>
+                  <Bell size={11} fill="currentColor" />
+                  <span>ON</span>
+                </>
+              ) : (
+                <>
+                  <BellOff size={11} />
+                  <span>OFF</span>
+                </>
+              )}
+            </button>
+
+            <button
+              className="control-btn mini"
+              onClick={() => alarm.adjustHours(1)}
+              title="Add 1 hour"
+            >
+              +1h
+            </button>
+            <button
+              className="control-btn mini"
+              onClick={() => alarm.adjustMinutes(5)}
+              title="Add 5 minutes"
+            >
+              +5m
+            </button>
+            <button
+              className="control-btn mini"
+              onClick={() => alarm.adjustMinutes(15)}
+              title="Add 15 minutes"
+            >
+              +15m
+            </button>
+
+            <button
+              className={`control-btn mini ${showAlarmSetter ? 'active' : ''}`}
+              onClick={() => {
+                setAlarmInputHours(String(alarm.alarmHours));
+                setAlarmInputMinutes(String(alarm.alarmMinutes));
+                setShowAlarmSetter(!showAlarmSetter);
+              }}
+              title="Set custom alarm time"
+            >
+              <SlidersHorizontal size={9} />
+              <span>Set</span>
+            </button>
+          </div>
+
+          <div className="right-controls">
+            <div className={`status-badge ${alarm.isEnabled ? 'alarm-active' : 'idle'}`}>
+              <span className={alarm.isEnabled ? 'pulsing-dot' : ''} />
+              <span>{alarm.timeRemainingStr}</span>
+            </div>
+          </div>
+
+          {/* Custom Alarm Time Popover */}
+          {showAlarmSetter && (
+            <div className="custom-duration-panel alarm-setter-panel">
+              <div className="presets-row">
+                <button className="preset-btn" onClick={() => { alarm.quickSetIn(15); setShowAlarmSetter(false); }}>+15m</button>
+                <button className="preset-btn" onClick={() => { alarm.quickSetIn(30); setShowAlarmSetter(false); }}>+30m</button>
+                <button className="preset-btn" onClick={() => { alarm.quickSetIn(60); setShowAlarmSetter(false); }}>+1h</button>
+                <button className="preset-btn" onClick={() => { alarm.setTime(7, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>07:00</button>
+                <button className="preset-btn" onClick={() => { alarm.setTime(8, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>08:00</button>
+              </div>
+              <form onSubmit={handleApplyAlarmTime} className="duration-inputs-row">
+                <div className="input-group">
+                  <input
+                    type="number"
+                    min="0"
+                    max="23"
+                    className="time-num-input"
+                    value={alarmInputHours}
+                    onChange={(e) => setAlarmInputHours(e.target.value)}
+                    title="Hour (0-23)"
+                  />
+                  <span className="input-unit">h</span>
+                </div>
+                <span className="input-divider">:</span>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    min="0"
+                    max="59"
+                    className="time-num-input"
+                    value={alarmInputMinutes}
+                    onChange={(e) => setAlarmInputMinutes(e.target.value)}
+                    title="Minute (0-59)"
+                  />
+                  <span className="input-unit">m</span>
+                </div>
+                <button type="submit" className="custom-set-btn" title="Save Alarm Time">
+                  <Check size={11} />
+                  <span>Set</span>
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </div>

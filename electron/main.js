@@ -247,6 +247,15 @@ ipcMain.handle('window:minimize', () => {
   }
 });
 
+ipcMain.handle('window:show', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show();
+    mainWindow.focus();
+    return true;
+  }
+  return false;
+});
+
 ipcMain.on('window:drag-start', (event, coords) => {
   if (!mainWindow) return;
   dragStartWindowPos = mainWindow.getPosition();
@@ -428,6 +437,17 @@ function createTray() {
           writeStore({ mode: 'work' });
           if (mainWindow && !mainWindow.isDestroyed()) {
             mainWindow.webContents.send('app:set-mode', 'work');
+          }
+        },
+      },
+      {
+        label: 'Mode: Alarm',
+        type: 'radio',
+        checked: currentMode === 'alarm',
+        click: () => {
+          writeStore({ mode: 'alarm' });
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('app:set-mode', 'alarm');
           }
         },
       },

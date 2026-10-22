@@ -61,3 +61,72 @@ export function playSoftNotificationSound() {
     console.warn('Could not play notification sound:', err);
   }
 }
+
+let activeAlarmCtx = null;
+let alarmIntervalId = null;
+
+/**
+ * Starts continuous, pleasant repeating alarm chime loop
+ */
+export function startAlarmSound() {
+  stopAlarmSound();
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    activeAlarmCtx = new AudioContextClass();
+
+    const ringOnce = () => {
+      if (!activeAlarmCtx || activeAlarmCtx.state === 'closed') return;
+      if (activeAlarmCtx.state === 'suspended') {
+        activeAlarmCtx.resume();
+      }
+      const now = activeAlarmCtx.currentTime;
+
+      const playTone = (freq, t, dur = 0.16, vol = 0.8) => {
+        try {
+          const osc = activeAlarmCtx.createOscillator();
+          const gain = activeAlarmCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(vol, t + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+          osc.connect(gain);
+          gain.connect(activeAlarmCtx.destination);
+          osc.start(t);
+          osc.stop(t + dur);
+        } catch (e) {}
+      };
+
+      // 4-note ascending alarm bell pattern
+      playTone(523.25, now, 0.16, 0.75);         // C5
+      playTone(659.25, now + 0.14, 0.16, 0.78);  // E5
+      playTone(783.99, now + 0.28, 0.18, 0.82);  // G5
+      playTone(1046.5, now + 0.44, 0.32, 0.85);  // C6
+    };
+
+    ringOnce();
+    alarmIntervalId = setInterval(ringOnce, 1300);
+  } catch (err) {
+    console.warn('Could not start alarm sound:', err);
+  }
+}
+
+/**
+ * Stops any actively ringing alarm
+ */
+export function stopAlarmSound() {
+  if (alarmIntervalId) {
+    clearInterval(alarmIntervalId);
+    alarmIntervalId = null;
+  }
+  if (activeAlarmCtx) {
+    try {
+      if (activeAlarmCtx.state !== 'closed') {
+        activeAlarmCtx.close();
+      }
+    } catch (e) {}
+    activeAlarmCtx = null;
+  }
+}
+

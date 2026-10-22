@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Maximize2 } from 'lucide-react';
+import { Maximize2, BellRing } from 'lucide-react';
 import ModeSelector from './components/ModeSelector';
 import FlipClock from './components/FlipClock';
 import Controls from './components/Controls';
@@ -7,11 +7,13 @@ import SettingsModal from './components/SettingsModal';
 import { useLiveClock } from './hooks/useLiveClock';
 import { useCountdownTimer } from './hooks/useCountdownTimer';
 import { useWorkTimer } from './hooks/useWorkTimer';
+import { useAlarm } from './hooks/useAlarm';
 
 const ACCENTS = {
   timer: '#f59e0b', // Warm amber / orange
   work: '#10b981',  // Mint green
   clock: '#06b6d4', // Cool cyan / blue
+  alarm: '#f43f5e', // Vibrant coral rose / alarm neon
 };
 
 export default function App() {
@@ -30,13 +32,14 @@ export default function App() {
   const clock = useLiveClock(is12Hour);
   const timer = useCountdownTimer(25);
   const work = useWorkTimer();
+  const alarm = useAlarm(is12Hour);
 
   // Load persisted state on startup
   useEffect(() => {
     if (window.electronAPI) {
       window.electronAPI.loadPersistedData().then((data) => {
         if (data) {
-          if (data.mode && ['timer', 'work', 'clock'].includes(data.mode)) {
+          if (data.mode && ['timer', 'work', 'clock', 'alarm'].includes(data.mode)) {
             setMode(data.mode);
           }
           if (typeof data.is12Hour === 'boolean') {
@@ -50,6 +53,12 @@ export default function App() {
           }
           if (data.cumulativeWorkMs) {
             work.restoreCumulativeWork(data.cumulativeWorkMs);
+          }
+          if (typeof data.alarmHours === 'number' && typeof data.alarmMinutes === 'number') {
+            alarm.setTime(data.alarmHours, data.alarmMinutes);
+          }
+          if (typeof data.isAlarmEnabled === 'boolean') {
+            alarm.setIsEnabled(data.isAlarmEnabled);
           }
         }
         setIsLoaded(true);
@@ -110,6 +119,9 @@ export default function App() {
         isExpanded,
         timerDuration: timer.durationMinutes,
         cumulativeWorkMs: work.cumulativeWorkMs,
+        alarmHours: alarm.alarmHours,
+        alarmMinutes: alarm.alarmMinutes,
+        isAlarmEnabled: alarm.isEnabled,
       }).then(() => {
         window.electronAPI.closeWindow();
       });
@@ -171,6 +183,8 @@ export default function App() {
     activeDisplay = timer;
   } else if (mode === 'work') {
     activeDisplay = work;
+  } else if (mode === 'alarm') {
+    activeDisplay = alarm.display;
   }
 
   // Always current live date and time
@@ -214,6 +228,16 @@ export default function App() {
                 {mode === 'timer' && activeDisplay.isRunning && (
                   <span className="compact-status-tag timer">TIMER</span>
                 )}
+                {mode === 'alarm' && (
+                  <span className={`compact-status-tag alarm ${alarm.isEnabled ? 'active' : ''}`}>
+                    {alarm.isEnabled ? 'ALARM ON' : 'ALARM'}
+                  </span>
+                )}
+                {mode !== 'alarm' && alarm.isEnabled && (
+                  <span className="compact-status-tag alarm active" title={`Alarm set for ${alarm.formattedAlarmTime}`}>
+                    🔔 {alarm.formattedAlarmTime}
+                  </span>
+                )}
               </div>
 
               <button
@@ -241,7 +265,7 @@ export default function App() {
                 m2={activeDisplay.m2}
                 s1={activeDisplay.s1}
                 s2={activeDisplay.s2}
-                ampm={mode === 'clock' && is12Hour ? activeDisplay.ampm : ''}
+                ampm={(mode === 'clock' || mode === 'alarm') && is12Hour ? activeDisplay.ampm : ''}
                 accentColor={accentColor}
               />
             </div>
@@ -258,6 +282,7 @@ export default function App() {
               is12Hour={is12Hour}
               onToggle12Hour={handleToggle12Hour}
               accentColor={accentColor}
+              isAlarmEnabled={alarm.isEnabled}
             />
 
             {/* Subheader Date info */}
@@ -282,7 +307,7 @@ export default function App() {
                 m2={activeDisplay.m2}
                 s1={activeDisplay.s1}
                 s2={activeDisplay.s2}
-                ampm={mode === 'clock' && is12Hour ? activeDisplay.ampm : ''}
+                ampm={(mode === 'clock' || mode === 'alarm') && is12Hour ? activeDisplay.ampm : ''}
                 accentColor={accentColor}
               />
             </div>
@@ -292,6 +317,7 @@ export default function App() {
               mode={mode}
               timer={timer}
               work={work}
+              alarm={alarm}
               accentColor={accentColor}
             />
 
@@ -302,6 +328,35 @@ export default function App() {
               accentColor={accentColor}
             />
           </>
+        )}
+
+        {/* Ringing Overlay: Active Chime alert with Dismiss and Snooze */}
+        {alarm.isRinging && (
+          <div className="alarm-ringing-overlay" onPointerDown={(e) => e.stopPropagation()}>
+            <div className="alarm-ringing-info">
+              <BellRing size={16} className="alarm-shake-bell" />
+              <div className="alarm-ringing-text">
+                <span className="alarm-ringing-title">ALARM RINGING!</span>
+                <span className="alarm-ringing-time">{alarm.formattedAlarmTime}</span>
+              </div>
+            </div>
+            <div className="alarm-ringing-actions">
+              <button
+                className="alarm-action-btn snooze"
+                onClick={() => alarm.snooze(5)}
+                title="Snooze for 5 minutes"
+              >
+                Snooze
+              </button>
+              <button
+                className="alarm-action-btn dismiss"
+                onClick={alarm.dismiss}
+                title="Dismiss alarm"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
