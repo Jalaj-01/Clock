@@ -1,6 +1,20 @@
-const { app, BrowserWindow, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+      mainWindow.focus();
+    }
+  });
+}
 
 const COMPACT_WIDTH = 224;
 const COMPACT_HEIGHT = 78;
@@ -9,6 +23,7 @@ const EXPANDED_HEIGHT = 180;
 const CORNER_MARGIN = 16;
 
 let mainWindow = null;
+let tray = null;
 let dragStartWindowPos = null;
 let dragStartMousePos = null;
 let snappingTimer = null;
@@ -173,7 +188,7 @@ function createWindow() {
     fullscreenable: false,
     thickFrame: false,
     minimizable: true,
-    skipTaskbar: false,
+    skipTaskbar: true,
     hasShadow: false,
     icon: path.join(__dirname, '../build/icon.png'),
     webPreferences: {
@@ -216,14 +231,19 @@ function createWindow() {
 
 // IPC Handlers
 ipcMain.handle('window:close', () => {
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
   if (mainWindow) {
     mainWindow.close();
   }
+  app.quit();
 });
 
 ipcMain.handle('window:minimize', () => {
   if (mainWindow) {
-    mainWindow.minimize();
+    mainWindow.hide();
   }
 });
 
@@ -333,14 +353,183 @@ ipcMain.handle('app:is-packaged', () => {
   return app.isPackaged;
 });
 
+function createTray() {
+  if (tray) return;
+
+  const iconPath = path.join(__dirname, '../build/icon.png');
+  let icon;
+  try {
+    icon = nativeImage.createFromPath(iconPath).resize({ width: 24, height: 24 });
+  } catch (err) {
+    console.error('Failed to create tray icon:', err);
+    icon = nativeImage.createEmpty();
+  }
+
+  tray = new Tray(icon);
+  tray.setToolTip('Flip Clock - Minimal Desktop Widget');
+
+  const updateMenu = () => {
+    const isVisible = mainWindow && mainWindow.isVisible();
+    const isAlwaysOnTop = mainWindow ? mainWindow.isAlwaysOnTop() : true;
+    const store = readStore();
+    const currentMode = store.mode || 'clock';
+
+    const menu = Menu.buildFromTemplate([
+      {
+        label: isVisible ? 'Hide Clock' : 'Show Clock',
+        click: () => {
+          if (!mainWindow) return;
+          if (mainWindow.isVisible()) {
+            mainWindow.hide();
+          } else {
+            mainWindow.show();
+            mainWindow.focus();
+          }
+          updateMenu();
+        },
+      },
+      {
+        label: store.isExpanded ? 'Switch to Compact View' : 'Switch to Expanded View',
+        click: () => {
+          const targetExp = !store.isExpanded;
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('app:set-expanded', targetExp);
+          }
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Mode: Live Clock',
+        type: 'radio',
+        checked: currentMode === 'clock',
+        click: () => {
+          writeStore({ mode: 'clock' });
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('app:set-mode', 'clock');
+          }
+        },
+      },
+      {
+        label: 'Mode: Timer',
+        type: 'radio',
+        checked: currentMode === 'timer',
+        click: () => {
+          writeStore({ mode: 'timer' });
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('app:set-mode', 'timer');
+          }
+        },
+      },
+      {
+        label: 'Mode: Work Tracker',
+        type: 'radio',
+        checked: currentMode === 'work',
+        click: () => {
+          writeStore({ mode: 'work' });
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('app:set-mode', 'work');
+          }
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Always on Top',
+        type: 'checkbox',
+        checked: isAlwaysOnTop,
+        click: (menuItem) => {
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.setAlwaysOnTop(menuItem.checked, 'screen-saver');
+          }
+        },
+      },
+      {
+        label: 'Start with Windows',
+        type: 'checkbox',
+        checked: app.getLoginItemSettings().openAtLogin,
+        click: (menuItem) => {
+          try {
+            app.setLoginItemSettings({
+              openAtLogin: menuItem.checked,
+              path: process.execPath,
+            });
+          } catch (err) {
+            console.error('Failed to set startup settings:', err);
+          }
+        },
+      },
+      {
+        label: 'Reset Position (Top-Right)',
+        click: () => {
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            const display = getDisplayForWindow(mainWindow);
+            const bounds = mainWindow.getBounds();
+            const corners = getCornersForDisplay(display, bounds.width, bounds.height);
+            const tr = corners.find((c) => c.name === 'top-right') || corners[1];
+            mainWindow.setPosition(Math.round(tr.x), Math.round(tr.y));
+            writeStore({ lastCorner: 'top-right', lastDisplayId: display.id });
+          }
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Quit Flip Clock',
+        click: () => {
+          if (tray) {
+            tray.destroy();
+            tray = null;
+          }
+          app.quit();
+        },
+      },
+    ]);
+
+    tray.setContextMenu(menu);
+  };
+
+  tray.on('click', () => {
+    if (!mainWindow) return;
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+    updateMenu();
+  });
+
+  tray.on('double-click', () => {
+    if (!mainWindow) return;
+    mainWindow.show();
+    mainWindow.focus();
+    updateMenu();
+  });
+
+  tray.on('right-click', () => {
+    updateMenu();
+  });
+
+  updateMenu();
+}
+
 app.whenReady().then(() => {
   createWindow();
+  createTray();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
+    } else if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
     }
   });
+});
+
+app.on('before-quit', () => {
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
 });
 
 app.on('window-all-closed', () => {

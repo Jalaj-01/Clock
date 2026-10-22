@@ -54,6 +54,18 @@ export default function App() {
         }
         setIsLoaded(true);
       });
+
+      if (window.electronAPI.onSetMode) {
+        window.electronAPI.onSetMode((newMode) => {
+          setMode(newMode);
+        });
+      }
+
+      if (window.electronAPI.onSetExpanded) {
+        window.electronAPI.onSetExpanded((nextExpanded) => {
+          handleToggleExpand(nextExpanded);
+        });
+      }
     } else {
       setIsLoaded(true);
     }

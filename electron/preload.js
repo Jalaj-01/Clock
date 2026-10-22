@@ -19,5 +19,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadPersistedData: () => ipcRenderer.invoke('data:load'),
   savePersistedData: (data) => ipcRenderer.invoke('data:save', data),
   
-  isPackaged: () => ipcRenderer.invoke('app:is-packaged')
+  isPackaged: () => ipcRenderer.invoke('app:is-packaged'),
+
+  onSetMode: (callback) => {
+    const handler = (event, mode) => callback(mode);
+    ipcRenderer.on('app:set-mode', handler);
+    return () => ipcRenderer.removeListener('app:set-mode', handler);
+  },
+  onSetExpanded: (callback) => {
+    const handler = (event, expanded) => callback(expanded);
+    ipcRenderer.on('app:set-expanded', handler);
+    return () => ipcRenderer.removeListener('app:set-expanded', handler);
+  }
 });
+
