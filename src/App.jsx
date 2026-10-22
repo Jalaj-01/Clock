@@ -230,7 +230,7 @@ export default function App() {
                 title="Expand clock & controls"
                 aria-label="Expand clock & controls"
               >
-                <Maximize2 size={10} />
+                <Maximize2 size={8} />
               </button>
             </div>
 

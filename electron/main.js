@@ -16,10 +16,10 @@ if (!gotTheLock) {
   });
 }
 
-const COMPACT_WIDTH = 224;
-const COMPACT_HEIGHT = 78;
-const EXPANDED_WIDTH = 280;
-const EXPANDED_HEIGHT = 180;
+const COMPACT_WIDTH = 150;
+const COMPACT_HEIGHT = 46;
+const EXPANDED_WIDTH = 250;
+const EXPANDED_HEIGHT = 160;
 const CORNER_MARGIN = 16;
 
 let mainWindow = null;
