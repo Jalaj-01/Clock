@@ -112,6 +112,7 @@ export default function Controls({
                     className="time-num-input"
                     value={inputHours}
                     onChange={(e) => setInputHours(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                     title="Hours"
                   />
                   <span className="input-unit">h</span>
@@ -125,6 +126,7 @@ export default function Controls({
                     className="time-num-input"
                     value={inputMinutes}
                     onChange={(e) => setInputMinutes(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                     title="Minutes"
                   />
                   <span className="input-unit">m</span>
@@ -337,6 +339,7 @@ export default function Controls({
                     className="time-num-input"
                     value={alarmInputHours}
                     onChange={(e) => setAlarmInputHours(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                     title={is12Hour ? "Hour (1-12)" : "Hour (0-23)"}
                   />
                   <span className="input-unit">h</span>
@@ -350,6 +353,7 @@ export default function Controls({
                     className="time-num-input"
                     value={alarmInputMinutes}
                     onChange={(e) => setAlarmInputMinutes(e.target.value)}
+                    onFocus={(e) => e.target.select()}
                     title="Minute (0-59)"
                   />
                   <span className="input-unit">m</span>

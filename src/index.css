@@ -1019,11 +1019,28 @@ html, body, #root {
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 3px;
-  padding: 0 3px;
+  padding: 0 4px;
+  transition: border-color 0.15s ease;
+}
+
+.input-group:focus-within {
+  border-color: var(--accent-color);
+}
+
+/* Remove up/down arrow spinners globally from all number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
 }
 
 .time-num-input {
-  width: 26px;
+  width: 22px;
   height: 20px;
   background: transparent;
   border: none;
@@ -1033,6 +1050,16 @@ html, body, #root {
   text-align: center;
   outline: none;
   font-family: inherit;
+  padding: 0;
+  -webkit-appearance: none !important;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+.time-num-input::-webkit-outer-spin-button,
+.time-num-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
 }
 
 .input-unit {
