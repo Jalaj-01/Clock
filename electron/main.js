@@ -326,8 +326,18 @@ ipcMain.handle('window:snap-to-corner', (event, cornerName) => {
   return false;
 });
 
+function cleanupDevStartupRegistration() {
+  if (process.platform === 'win32') {
+    try {
+      const { exec } = require('child_process');
+      exec('reg delete "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" /v "electron.app.Electron" /f', () => {});
+    } catch (e) {}
+  }
+}
+
 ipcMain.handle('settings:get-startup', () => {
   try {
+    if (!app.isPackaged) return false;
     const settings = app.getLoginItemSettings();
     return settings.openAtLogin;
   } catch (err) {
@@ -338,9 +348,14 @@ ipcMain.handle('settings:get-startup', () => {
 
 ipcMain.handle('settings:set-startup', (event, enabled) => {
   try {
+    if (!app.isPackaged) {
+      console.log('Skipping startup registration in development');
+      return true;
+    }
     app.setLoginItemSettings({
       openAtLogin: Boolean(enabled),
       path: process.execPath,
+      name: 'FlipClock',
     });
     return true;
   } catch (err) {
@@ -465,12 +480,14 @@ function createTray() {
       {
         label: 'Start with Windows',
         type: 'checkbox',
-        checked: app.getLoginItemSettings().openAtLogin,
+        checked: app.isPackaged ? app.getLoginItemSettings().openAtLogin : false,
         click: (menuItem) => {
           try {
+            if (!app.isPackaged) return;
             app.setLoginItemSettings({
               openAtLogin: menuItem.checked,
               path: process.execPath,
+              name: 'FlipClock',
             });
           } catch (err) {
             console.error('Failed to set startup settings:', err);
@@ -532,6 +549,7 @@ function createTray() {
 }
 
 app.whenReady().then(() => {
+  cleanupDevStartupRegistration();
   createWindow();
   createTray();
 

@@ -17,7 +17,8 @@
   },
   "build": {
     "appId": "com.flipclock.minimal",
-    "productName": "FlipClock",
+    "productName": "Flip Clock",
+    "copyright": "Copyright © 2026 Flip Clock",
     "directories": {
       "output": "release"
     },
@@ -29,6 +30,9 @@
     ],
     "win": {
       "icon": "build/icon.png",
+      "publisherName": "Flip Clock",
+      "legalCopyright": "Copyright © 2026 Flip Clock",
+      "requestedExecutionLevel": "asInvoker",
       "target": [
         {
           "target": "nsis",
@@ -50,7 +54,9 @@
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Flip Clock"
+      "shortcutName": "Flip Clock",
+      "uninstallDisplayName": "Flip Clock",
+      "runAfterFinish": true
     }
   },
   "dependencies": {

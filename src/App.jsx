@@ -318,6 +318,7 @@ export default function App() {
               timer={timer}
               work={work}
               alarm={alarm}
+              is12Hour={is12Hour}
               accentColor={accentColor}
             />
 

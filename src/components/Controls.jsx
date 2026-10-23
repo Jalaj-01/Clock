@@ -6,6 +6,7 @@ export default function Controls({
   timer,
   work,
   alarm,
+  is12Hour = true,
   accentColor,
 }) {
   const [showCustomSetter, setShowCustomSetter] = useState(false);
@@ -13,8 +14,9 @@ export default function Controls({
   const [inputMinutes, setInputMinutes] = useState(String(timer?.durationRemainingMinutes || 25));
 
   const [showAlarmSetter, setShowAlarmSetter] = useState(false);
-  const [alarmInputHours, setAlarmInputHours] = useState(String(alarm?.alarmHours ?? 8));
-  const [alarmInputMinutes, setAlarmInputMinutes] = useState(String(alarm?.alarmMinutes ?? 0));
+  const [alarmInputHours, setAlarmInputHours] = useState('8');
+  const [alarmInputMinutes, setAlarmInputMinutes] = useState('00');
+  const [alarmInputAmPm, setAlarmInputAmPm] = useState('AM');
 
   const handleApplyCustomDuration = (e) => {
     e?.preventDefault();
@@ -34,9 +36,13 @@ export default function Controls({
   const handleApplyAlarmTime = (e) => {
     e?.preventDefault();
     if (!alarm) return;
-    const h = parseInt(alarmInputHours, 10) || 0;
+    const h = parseInt(alarmInputHours, 10) || (is12Hour ? 12 : 0);
     const m = parseInt(alarmInputMinutes, 10) || 0;
-    alarm.setTime(h, m);
+    if (is12Hour) {
+      alarm.setTime12Hour(h, m, alarmInputAmPm);
+    } else {
+      alarm.setTime(h, m);
+    }
     alarm.setIsEnabled(true);
     setShowAlarmSetter(false);
   };
@@ -265,11 +271,26 @@ export default function Controls({
               +15m
             </button>
 
+            {is12Hour && (
+              <button
+                className="control-btn mini ampm-quick-btn"
+                onClick={alarm.toggleAmPm}
+                title={`Click to switch between AM and PM (Currently: ${alarm.ampm})`}
+              >
+                <span>{alarm.ampm}</span>
+              </button>
+            )}
+
             <button
               className={`control-btn mini ${showAlarmSetter ? 'active' : ''}`}
               onClick={() => {
-                setAlarmInputHours(String(alarm.alarmHours));
-                setAlarmInputMinutes(String(alarm.alarmMinutes));
+                if (is12Hour) {
+                  setAlarmInputHours(String(alarm.display12Hours || 8));
+                  setAlarmInputAmPm(alarm.ampm || 'AM');
+                } else {
+                  setAlarmInputHours(String(alarm.alarmHours));
+                }
+                setAlarmInputMinutes(String(alarm.alarmMinutes).padStart(2, '0'));
                 setShowAlarmSetter(!showAlarmSetter);
               }}
               title="Set custom alarm time"
@@ -293,19 +314,30 @@ export default function Controls({
                 <button className="preset-btn" onClick={() => { alarm.quickSetIn(15); setShowAlarmSetter(false); }}>+15m</button>
                 <button className="preset-btn" onClick={() => { alarm.quickSetIn(30); setShowAlarmSetter(false); }}>+30m</button>
                 <button className="preset-btn" onClick={() => { alarm.quickSetIn(60); setShowAlarmSetter(false); }}>+1h</button>
-                <button className="preset-btn" onClick={() => { alarm.setTime(7, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>07:00</button>
-                <button className="preset-btn" onClick={() => { alarm.setTime(8, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>08:00</button>
+                {is12Hour ? (
+                  <>
+                    <button className="preset-btn" onClick={() => { alarm.setTime12Hour(7, 0, 'AM'); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>7am</button>
+                    <button className="preset-btn" onClick={() => { alarm.setTime12Hour(8, 0, 'AM'); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>8am</button>
+                    <button className="preset-btn" onClick={() => { alarm.setTime12Hour(10, 0, 'PM'); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>10pm</button>
+                  </>
+                ) : (
+                  <>
+                    <button className="preset-btn" onClick={() => { alarm.setTime(7, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>07:00</button>
+                    <button className="preset-btn" onClick={() => { alarm.setTime(8, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>08:00</button>
+                    <button className="preset-btn" onClick={() => { alarm.setTime(22, 0); alarm.setIsEnabled(true); setShowAlarmSetter(false); }}>22:00</button>
+                  </>
+                )}
               </div>
               <form onSubmit={handleApplyAlarmTime} className="duration-inputs-row">
                 <div className="input-group">
                   <input
                     type="number"
-                    min="0"
-                    max="23"
+                    min={is12Hour ? "1" : "0"}
+                    max={is12Hour ? "12" : "23"}
                     className="time-num-input"
                     value={alarmInputHours}
                     onChange={(e) => setAlarmInputHours(e.target.value)}
-                    title="Hour (0-23)"
+                    title={is12Hour ? "Hour (1-12)" : "Hour (0-23)"}
                   />
                   <span className="input-unit">h</span>
                 </div>
@@ -322,6 +354,26 @@ export default function Controls({
                   />
                   <span className="input-unit">m</span>
                 </div>
+
+                {is12Hour && (
+                  <div className="ampm-toggle-switch">
+                    <button
+                      type="button"
+                      className={`ampm-choice-btn ${alarmInputAmPm === 'AM' ? 'active' : ''}`}
+                      onClick={() => setAlarmInputAmPm('AM')}
+                    >
+                      AM
+                    </button>
+                    <button
+                      type="button"
+                      className={`ampm-choice-btn ${alarmInputAmPm === 'PM' ? 'active' : ''}`}
+                      onClick={() => setAlarmInputAmPm('PM')}
+                    >
+                      PM
+                    </button>
+                  </div>
+                )}
+
                 <button type="submit" className="custom-set-btn" title="Save Alarm Time">
                   <Check size={11} />
                   <span>Set</span>

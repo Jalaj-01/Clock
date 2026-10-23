@@ -74,6 +74,24 @@ export function useAlarm(is12Hour = true) {
     lastTriggeredDateRef.current = null;
   }, []);
 
+  const setTime12Hour = useCallback((h12, m, ampmVal) => {
+    let h = Math.max(1, Math.min(12, Number(h12) || 12));
+    const validM = Math.max(0, Math.min(59, Number(m) || 0));
+    if (ampmVal === 'PM') {
+      h = h === 12 ? 12 : h + 12;
+    } else {
+      h = h === 12 ? 0 : h;
+    }
+    setAlarmHours(h);
+    setAlarmMinutes(validM);
+    lastTriggeredDateRef.current = null;
+  }, []);
+
+  const toggleAmPm = useCallback(() => {
+    setAlarmHours((prev) => (prev >= 12 ? prev - 12 : prev + 12));
+    lastTriggeredDateRef.current = null;
+  }, []);
+
   const adjustHours = useCallback((delta) => {
     setAlarmHours((prev) => {
       let next = (prev + delta) % 24;
@@ -159,11 +177,16 @@ export function useAlarm(is12Hour = true) {
     toggleEnabled,
     setIsEnabled,
     setTime,
+    setTime12Hour,
+    toggleAmPm,
     adjustHours,
     adjustMinutes,
     quickSetIn,
     dismiss,
     snooze,
+    ampm,
+    display12Hours: displayHours,
+    is12Hour,
     timeRemainingStr: getTimeRemainingStr(),
     formattedAlarmTime: `${hh}:${mm}${ampm ? ' ' + ampm : ''}`,
     display: {
