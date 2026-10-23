@@ -169,15 +169,19 @@ html, body, #root {
   padding: 0 4px;
   opacity: 0.92;
   transition: opacity 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .compact-meta-group {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   line-height: 1;
   text-align: center;
+  white-space: nowrap;
+  flex-wrap: nowrap;
 }
 
 .meta-day-date {
@@ -187,6 +191,8 @@ html, body, #root {
   color: var(--text-dim);
   text-transform: uppercase;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .meta-dot {
@@ -194,6 +200,8 @@ html, body, #root {
   color: rgba(255, 255, 255, 0.75);
   margin: 0 1.5px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .meta-time {
@@ -202,6 +210,8 @@ html, body, #root {
   letter-spacing: 0.4px;
   color: #ffffff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 5px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .compact-status-tag {
@@ -212,6 +222,26 @@ html, body, #root {
   border-radius: 2px;
   line-height: 1;
   margin-left: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.compact-alarm-bell-tag {
+  font-size: 8px;
+  line-height: 1;
+  margin-left: 2px;
+  color: #ff6b8b;
+  display: inline-flex;
+  align-items: center;
+  filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.7));
+  animation: bellGlow 2s infinite alternate ease-in-out;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@keyframes bellGlow {
+  0% { opacity: 0.8; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1.1); }
 }
 
 .compact-status-tag.work {
@@ -1243,44 +1273,113 @@ html, body, #root {
   100% { transform: rotate(-18deg) scale(1.1); }
 }
 
+.alarm-ringing-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: rgba(18, 6, 12, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid #f43f5e;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  box-shadow: 0 0 24px rgba(244, 63, 94, 0.55), inset 0 0 12px rgba(244, 63, 94, 0.25);
+  animation: alarmRingGlow 1s ease-in-out infinite alternate;
+  box-sizing: border-box;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.alarm-ringing-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ffffff;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.alarm-shake-bell {
+  color: #ff476f;
+  animation: bellShake 0.45s infinite alternate ease-in-out;
+  flex-shrink: 0;
+}
+
 .alarm-ringing-text {
   display: flex;
   flex-direction: column;
   line-height: 1.1;
+  min-width: 0;
 }
 
 .alarm-ringing-title {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 900;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   color: #ff6b8b;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .alarm-ringing-time {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   color: #ffffff;
+  white-space: nowrap;
+}
+
+/* Compact Mode Ringing Adjustments: Prevent any button overflow */
+.widget-card.compact .alarm-ringing-overlay {
+  padding: 0 6px;
+}
+
+.widget-card.compact .alarm-ringing-title {
+  display: none;
+}
+
+.widget-card.compact .alarm-ringing-info {
+  gap: 4px;
+}
+
+.widget-card.compact .alarm-shake-bell {
+  width: 13px;
+  height: 13px;
+}
+
+.widget-card.compact .alarm-ringing-actions {
+  gap: 3px;
+}
+
+.widget-card.compact .alarm-action-btn {
+  height: 22px;
+  font-size: 8px;
+  padding: 0 5px;
 }
 
 .alarm-ringing-actions {
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-shrink: 0;
 }
 
 .alarm-action-btn {
   height: 24px;
   border-radius: 4px;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.4px;
-  padding: 0 8px;
+  letter-spacing: 0.3px;
+  padding: 0 7px;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.15s ease;
   outline: none;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .alarm-action-btn.snooze {

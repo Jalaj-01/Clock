@@ -228,14 +228,14 @@ export default function App() {
                 {mode === 'timer' && activeDisplay.isRunning && (
                   <span className="compact-status-tag timer">TIMER</span>
                 )}
-                {mode === 'alarm' && (
-                  <span className={`compact-status-tag alarm ${alarm.isEnabled ? 'active' : ''}`}>
-                    {alarm.isEnabled ? 'ALARM ON' : 'ALARM'}
+                {mode === 'alarm' && alarm.isEnabled && (
+                  <span className="compact-status-tag alarm active">
+                    ALARM ON
                   </span>
                 )}
                 {mode !== 'alarm' && alarm.isEnabled && (
-                  <span className="compact-status-tag alarm active" title={`Alarm set for ${alarm.formattedAlarmTime}`}>
-                    🔔 {alarm.formattedAlarmTime}
+                  <span className="compact-alarm-bell-tag" title={`Alarm set for ${alarm.formattedAlarmTime}`}>
+                    🔔
                   </span>
                 )}
               </div>

@@ -124,7 +124,21 @@ export function useAlarm(is12Hour = true) {
     setIsRinging(false);
     stopAlarmSound();
     setSnoozeUntil(null);
+    setIsEnabled(false);
   }, []);
+
+  // Auto-dismiss after 3 minutes if ringing unattended
+  useEffect(() => {
+    let timeout = null;
+    if (isRinging) {
+      timeout = setTimeout(() => {
+        dismiss();
+      }, 180000);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isRinging, dismiss]);
 
   const snooze = useCallback((minutes = 5) => {
     setIsRinging(false);
