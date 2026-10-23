@@ -128,6 +128,22 @@ export default function App() {
     }
   };
 
+  // Test shortcut to trigger ringing in DEV: Alt+R or window.__testRing()
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    window.__testRing = () => alarm.setIsRinging(true);
+    const onKey = (e) => {
+      if (e.altKey && (e.key === 'r' || e.key === 'R')) {
+        alarm.setIsRinging((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      delete window.__testRing;
+    };
+  }, [alarm]);
+
   // Draggable widget surface with pointer capture
   const handlePointerDown = (e) => {
     if (e.button !== 0) return;

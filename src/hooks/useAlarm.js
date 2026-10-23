@@ -187,6 +187,7 @@ export function useAlarm(is12Hour = true) {
     alarmMinutes,
     isEnabled,
     isRinging,
+    setIsRinging,
     snoozeUntil,
     toggleEnabled,
     setIsEnabled,
